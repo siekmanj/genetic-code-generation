@@ -4,17 +4,21 @@
 
 from genome import Genome
 
-INITIAL_GENOMES = 4;
+INITIAL_GENOMES = 20;
+STABLE_GENOMES = 16;
 
-genomes = [];
 
 def initializeGenomes(num):
+    genomes = []
     for i in range(0, num):
         genomes.append(Genome(True));
+    return genomes;
 
-def getFittestGenomes(num):
+def getFittestGenomes(num, genomes):
     topGenomes = [];
+    
     while(len(topGenomes) < num):
+        print("Found " + str(len(topGenomes)) + " fittest genomes so far: ", end="");
         currentTopGenome = [];
         currentTopScore = 0;
         for genome in genomes:
@@ -25,16 +29,36 @@ def getFittestGenomes(num):
                     currentTopScore = currentScore;
                     currentTopGenome = currentGenome;
         topGenomes.append(currentTopGenome);
+        print(topGenomes[len(topGenomes)-1].genome[0]);
     return topGenomes
 
+def printGenome(genome):
+    counter = 0;
+    for i in genome.genome:
+        print(i + " ", end="");
+        counter += 1;
+        if counter % 15 == 0:
+            print("");
 def main():
-    initializeGenomes(INITIAL_GENOMES);
+    genomes = initializeGenomes(INITIAL_GENOMES);
 
-    inpt = input("Begin breeding?");
-    while(inpt == 'yes'):
-        cream_of_the_crop = getFittestGenomes(2);
-        genomes.append(Genome.crossbreed(cream_of_the_crop[0], cream_of_the_crop[1]));
-        print(genomes[len(genomes)-1].fitness());
+    cream_of_the_crop = []
+    
+    while(True):
+        print("Crossbreeding.", end="");
+        for i in range(0, len(cream_of_the_crop)-1):
+            genomes.append(cream_of_the_crop[i].crossbreed(cream_of_the_crop[i+1]))
+            genomes.append(cream_of_the_crop[i].crossbreed(cream_of_the_crop[len(cream_of_the_crop)-i-1]));
+        print("\nSelecting " + str(STABLE_GENOMES) + " fittest genomes.");
+        cream_of_the_crop = getFittestGenomes(STABLE_GENOMES, genomes);
+                
+        print("Highest score was " + str(cream_of_the_crop[0].fitness()) + ".");
+        
+        counter = 0;
+        genomes = cream_of_the_crop;
+        
+
+            
         
         
 

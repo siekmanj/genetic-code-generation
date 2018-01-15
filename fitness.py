@@ -1,7 +1,18 @@
+"""
+Things that receive a positive fitness score:
+Newlines + 1
+Indents + 3
+Lines less than 100 characters long + 1
+Keywords (followed by variable) + 5
+    else preceded by an if + 5
+    keyword + var name = something + 10
+                           ^ if this is a previously declared variable + 12
+Compilation + 60
+fitness is evaluated per-line - lines with a fitness of 0 aren't included and considered inactive portions of genome
+"""
 import keyword as k;
 
 def evaluateFitness(genome):
-    print("FUCK");
     overallScore = 0;
     for word in genome:
         highestScore = 0;

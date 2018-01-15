@@ -10,29 +10,31 @@ MAX_NUMBER_OF_MUTATIONS = 50;
     
 class Genome:
     """This class represents a genome."""
-    def __init__(self):
+    def __init__(self, init): 
         self.genome = [];
-        for i in range(0, GENOME_LENGTH):
-            wordLength = randint(MIN_WORD_LEN, MAX_WORD_LEN);
-            word = "";
-            for i in range(0, wordLength):
-                char = randint(0, len(characters)-1);
-                word += characters[char];
-                self.genome.append(word);
+        if(init):
+            for i in range(0, GENOME_LENGTH):
+                wordLength = randint(MIN_WORD_LEN, MAX_WORD_LEN);
+                word = "";
+                for i in range(0, wordLength):
+                    char = randint(0, len(characters)-1);
+                    word += characters[char];
+                    self.genome.append(word);
 
-    def crossbreed(self, genome1, genome2): #takes two existing genomes, and inserts a word from one of two parents into every slot.
-        new_genome = [];
+    def crossbreed(self, genome2): #takes two existing genomes, and inserts a word from one of two parents into every slot.
+        new_genome = Genome(False);
         for i in range(0, GENOME_LENGTH):
             if randint(0, 1) == 1:    #50/50 chance of word coming from either parent
-                new_genome.append(genome1[i]); 
+                new_genome.genome.append(self.genome[i]); 
             else:
-                new_genome.append(genome2[i]);
+                new_genome.genome.append(genome2.genome[i]);
         for i in range(0, randint(0, MAX_NUMBER_OF_MUTATIONS)): #chance of random mutation - replace a random character from a random word with another random character
             if(randint(0, 100) < MUTATION_RATE):
                 randomIndex = randint(0, GENOME_LENGTH);
-                new_genome[randomIndxex][randint(0, len(new_genome[randomIndex]))] = characters[randint(0, len(characters))];
+                mutation = list(new_genome.genome[randomIndex])
+                mutation[randint(0, len(new_genome.genome[randomIndex])-1)] = characters[randint(0, len(characters))];
+                new_genome.genome[randomIndex] = mutation;
         return new_genome;
     
     def fitness(self):
-        evaluateFitness(self.genome);
-    
+        return evaluateFitness(self.genome);

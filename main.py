@@ -1,37 +1,44 @@
 # Genetic python code generator
 # Written by Jonah Siekmann
 # 1/9/2018
-"""
-Things that receive a positive fitness score:
-Newlines + 1
-Indents + 3
-Lines less than 100 characters long + 1
-Keywords (followed by variable) + 5
-    else preceded by an if + 5
-    keyword + var name = something + 10
-                           ^ if this is a previously declared variable + 12
-    
-Compilation + 60
-
-fitness is evaluated per-line - lines with a fitness of 0 aren't included and considered inactive portions of genome
-
-"""
 
 from genome import Genome
 
+INITIAL_GENOMES = 4;
+
 genomes = [];
 
+def initializeGenomes(num):
+    for i in range(0, num):
+        genomes.append(Genome(True));
+
+def getFittestGenomes(num):
+    topGenomes = [];
+    while(len(topGenomes) < num):
+        currentTopGenome = [];
+        currentTopScore = 0;
+        for genome in genomes:
+            if genome not in topGenomes:
+                currentScore = genome.fitness();
+                currentGenome = genome;
+                if currentTopScore < currentScore:
+                    currentTopScore = currentScore;
+                    currentTopGenome = currentGenome;
+        topGenomes.append(currentTopGenome);
+    return topGenomes
+
 def main():
-    
-    genomes.append(Genome());
-    genomes[0].fitness();
-    inpt = input("Continue?");
+    initializeGenomes(INITIAL_GENOMES);
+
+    inpt = input("Begin breeding?");
     while(inpt == 'yes'):
-        fitlist = [];
-        for i in genomes:
-            score = fitness(i);
-            fitlist.append(score);
-            print(score);
+        cream_of_the_crop = getFittestGenomes(2);
+        genomes.append(Genome.crossbreed(cream_of_the_crop[0], cream_of_the_crop[1]));
+        print(genomes[len(genomes)-1].fitness());
+        
+        
+
+
         
         
 

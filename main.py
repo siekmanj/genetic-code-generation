@@ -2,12 +2,11 @@
 # Written by Jonah Siekmann
 # 1/9/2018
 
-from genome import Genome
+from genome import *
 from random import *
 import time
 import math
-INITIAL_GENOMES = 30;
-STABLE_GENOMES = 22;
+
 
 
 def initializeGenomes(num):
@@ -19,7 +18,6 @@ def initializeGenomes(num):
 def getFittestGenomes(num, genomes):
     topGenomes = [];
     fitList = []
-    print("Selecting " + str(num) + " fittest genomes of " + str(len(genomes)) + " total.");
     for i in range(0, len(genomes)-1):
         fitList.append(genomes[i].fitness());
 
@@ -33,18 +31,15 @@ def getFittestGenomes(num, genomes):
                     currentTopScore = currentScore;
                     currentTopGenome = currentGenome;
         topGenomes.append(currentTopGenome);
-        print("Found " + str(len(topGenomes)) + " fittest genomes so far: ", end="");
-        for i in range(0, 5):
-            print(topGenomes[len(topGenomes)-1].genome[i], end=" ");
-        print("");
     return topGenomes
+
 
 def printGenome(genome):
     counter = 0;
     for i in genome.genome:
         print(i + " ", end="");
         counter += 1;
-        if counter % 15 == 0:
+        if counter % 22 == 0:
             print("");
 def main():
     genomes = initializeGenomes(INITIAL_GENOMES);
@@ -57,26 +52,28 @@ def main():
     
     while(True):
         elapsed_time = math.floor(time.time() - start_t);
-        print("Cycle " + str(counter) + ". It has been " + str(elapsed_time) + "s since initialization.");
-        print("Pausing for three seconds for readability."); 
-        time.sleep(3);
-        print("Breeding...");
+        print("Commencing cycle " + str(counter) + ". It has been " + str(elapsed_time) + " seconds since initialization. ", end="");
         if(len(cream_of_the_crop) > 0):
             for i in range(0, randint(0, len(cream_of_the_crop)-1)):
                 genomes.append(cream_of_the_crop[i].crossbreed(cream_of_the_crop[randint(0, len(cream_of_the_crop)-1)]));
-                
         for i in range(0, randint(0, len(genomes)-1)):
             genomes.append(genomes[i].crossbreed(genomes[randint(0, len(genomes)-1)]));
-        print("Breeding finished.");
+        print("Current number of genomes in pool: " + str(len(genomes)));
         
-        cream_of_the_crop = getFittestGenomes(STABLE_GENOMES, genomes);
+        cream_of_the_crop = getFittestGenomes(randint(STABLE_GENOMES, STABLE_GENOMES + STABLE_GENOMES*0.1), genomes);
+        
         top_fitness = cream_of_the_crop[0].fitness();
         top_wordcount = cream_of_the_crop[0].wordcount();
         
-        print("Highest scoring genome fitness was " + str(cream_of_the_crop[0].fitness()) + " with a keyword count of " + str(cream_of_the_crop[0].wordcount()) + "/1000 (" + str(100*(top_wordcount)/1000) + "%)");
+        print("Genetic similarity between top two genomes: " + str(math.floor(100 * (cream_of_the_crop[0].similarity(cream_of_the_crop[1])))) + "%. ", end="");
         
+        print("Highest scoring genome fitness was " + str(top_fitness) + " with a keyword count of " + str(top_wordcount) + "/1000 (" + str(100*(top_wordcount)/1000) + "%)");
+        time.sleep(2);
         genomes = cream_of_the_crop;
-        
+        if counter % 500 == 0:
+            print("\n\n");
+            printGenome(cream_of_the_crop[0]);
+            print("\n\n");
         counter += 1;
         
 

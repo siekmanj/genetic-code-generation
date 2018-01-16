@@ -1,7 +1,7 @@
 import time
 from random import *
 from fitness import evaluateFitness
-
+from fitness import numberOfKeywords
 characters = ['T', 'F', 'N', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']; 
 MIN_WORD_LEN = 2;
 MAX_WORD_LEN = 8;
@@ -31,11 +31,6 @@ class Genome:
                 new_genome.genome.append(self.genome[i]); 
             else:
                 new_genome.genome.append(genome2.genome[i]);
-#            if i % 20 == 0:
-#                print(new_genome.genome[i] + " ", end = "");
-#            if i % 200 == 0:
-#                print("");
-#        print("");
         for i in range(0, randint(0, MAX_NUMBER_OF_MUTATIONS)): #chance of random mutation - replace a random character from a random word with another random character
             if(randint(0, 100) < MUTATION_RATE):
                 randomIndex = randint(0, GENOME_LENGTH-1);
@@ -46,3 +41,6 @@ class Genome:
     
     def fitness(self):
         return evaluateFitness(self.genome);
+    
+    def wordcount(self):
+        return numberOfKeywords(self.genome);

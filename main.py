@@ -75,9 +75,9 @@ def main():
         similarity_factor = getAverageSimilarity(cream_of_the_crop[0], cream_of_the_crop);
         
         if(similarity_factor > .3 and mutation_rate < .50):
-            mutation_rate += 0.01;
+            mutation_rate += 0.005;
         if(similarity_factor < .3 and mutation_rate > .12):
-            mutation_rate -= 0.01;
+            mutation_rate -= 0.005;
         
         
         print("Genetic similarity between #1 and top " + str(len(cream_of_the_crop)) + ": " + str(math.floor(100 * similarity_factor)) + "%. ", end="");

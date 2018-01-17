@@ -36,20 +36,20 @@ class Genome:
                 new_genome.genome.append(self.genome[i]); 
             else:
                 new_genome.genome.append(genome2.genome[i]);
-        if(randint(0, 100) < new_genome.mutation_rate * 100): #random chance of a character in a word mutating into something else.
-            randomWord = choice(new_genome.genome);
-            mutation = list(randomWord);
-            if randint(0, 1) == 1: # 50% chance that the mutation will be a character replacement or deletion
-                if randint(0, 1) == 1:
-                    del mutation[randint(0, len(randomWord)-1)];
+        for word in new_genome.genome:
+            if(randint(0, 100) < new_genome.mutation_rate * 100): #random chance of a character in a word mutating into something else.
+                mutation = list(word);
+                if randint(0, 1) == 1: # 50% chance that the mutation will be a character replacement or deletion
+                    if randint(0, 1) == 1:
+                        del mutation[randint(0, len(word)-1)];
+                    else:
+                        mutation[randint(0, len(word)-1)] = choice(characters);
                 else:
-                    mutation[randint(0, len(randomWord)-1)] = choice(characters);
-            else:
-                if randint(0, 1) == 1 and len(randomWord) < MAX_WORD_LEN: # 25% chance that the mutation will lengthen the string by one character
-                    mutation.append(choice(characters));
-                elif len(randomWord) > MIN_WORD_LEN: # 25% chance that the mutation will shorten the string by one character.
-                    mutation.pop(); 
-            randomWord = ''.join(str(c) for c in mutation);
+                    if randint(0, 1) == 1 and len(word) < MAX_WORD_LEN: # 25% chance that the mutation will lengthen the string by one character
+                        mutation.append(choice(characters));
+                    elif len(word) > MIN_WORD_LEN: # 25% chance that the mutation will shorten the string by one character.
+                        mutation.pop(); 
+                word = ''.join(str(c) for c in mutation);
         return new_genome;
     
     def similarity(self, genome): #returns the average word similarity of two genomes. May reveal something about genetic diversity (?)

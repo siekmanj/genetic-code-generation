@@ -39,7 +39,7 @@ def printGenome(genome):
     for i in genome.genome:
         print(i + " ", end="");
         counter += 1;
-        if counter % 22 == 0:
+        if counter % 15 == 0:
             print("");
 def main():
     genomes = initializeGenomes(INITIAL_GENOMES);
@@ -70,7 +70,7 @@ def main():
         print("Highest scoring genome fitness was " + str(top_fitness) + " with a keyword count of " + str(top_wordcount) + "/1000 (" + str(100*(top_wordcount)/1000) + "%)");
         time.sleep(2);
         genomes = cream_of_the_crop;
-        if counter % 500 == 0:
+        if counter % 20 == 0:
             print("\n\n");
             printGenome(cream_of_the_crop[0]);
             print("\n\n");

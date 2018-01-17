@@ -33,6 +33,12 @@ def getFittestGenomes(num, genomes):
         topGenomes.append(currentTopGenome);
     return topGenomes
 
+def getAverageSimilarity(genome, genomes):
+    average = 0;
+    for i in genomes:
+        if i is not genome:
+            average += genome.similarity(i);
+    return average/len(genomes);
 
 def printGenome(genome):
     counter = 0;
@@ -46,6 +52,8 @@ def main():
 
     cream_of_the_crop = []
     
+    mutation_rate = .12
+    
     counter = 0;
     
     start_t = time.time();
@@ -55,19 +63,26 @@ def main():
         print("Commencing cycle " + str(counter) + ". It has been " + str(elapsed_time) + " seconds since initialization. ", end="");
         if(len(cream_of_the_crop) > 0):
             for i in range(0, randint(0, len(cream_of_the_crop)-1)):
-                genomes.append(cream_of_the_crop[i].crossbreed(cream_of_the_crop[randint(0, len(cream_of_the_crop)-1)]));
+                genomes.append(cream_of_the_crop[i].crossbreed(cream_of_the_crop[randint(0, len(cream_of_the_crop)-1)], mutation_rate));
         for i in range(0, randint(0, len(genomes)-1)):
-            genomes.append(genomes[i].crossbreed(genomes[randint(0, len(genomes)-1)]));
+            genomes.append(genomes[i].crossbreed(genomes[randint(0, len(genomes)-1)], mutation_rate));
         print("Current number of genomes in pool: " + str(len(genomes)));
         
-        cream_of_the_crop = getFittestGenomes(randint(STABLE_GENOMES, STABLE_GENOMES + STABLE_GENOMES*0.1), genomes);
+        cream_of_the_crop = getFittestGenomes(randint(STABLE_GENOMES, math.floor(STABLE_GENOMES + STABLE_GENOMES*0.1)), genomes);
         
         top_fitness = cream_of_the_crop[0].fitness();
         top_wordcount = cream_of_the_crop[0].wordcount();
+        similarity_factor = getAverageSimilarity(cream_of_the_crop[0], cream_of_the_crop);
         
-        print("Genetic similarity between top two genomes: " + str(math.floor(100 * (cream_of_the_crop[0].similarity(cream_of_the_crop[1])))) + "%. ", end="");
+        if(similarity_factor > .3 and mutation_rate < .50):
+            mutation_rate += 0.01;
+        if(similarity_factor < .3 and mutation_rate > .12):
+            mutation_rate -= 0.01;
         
-        print("Highest scoring genome fitness was " + str(top_fitness) + " with a keyword count of " + str(top_wordcount) + "/1000 (" + str(100*(top_wordcount)/1000) + "%)");
+        
+        print("Genetic similarity between #1 and top " + str(len(cream_of_the_crop)) + ": " + str(math.floor(100 * similarity_factor)) + "%. ", end="");
+        
+        print("Highest score was 0." + str(math.floor(1000*top_fitness)) + " with a keyword count of " + str(top_wordcount) + "/1000 (" + str(100*(top_wordcount)/1000) + "%)");
         time.sleep(2);
         genomes = cream_of_the_crop;
         if counter % 20 == 0:

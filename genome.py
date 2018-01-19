@@ -4,7 +4,7 @@ from fitness import *
 characters = ['T', 'F', 'N', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']; 
 MIN_WORD_LEN = 2;
 MAX_WORD_LEN = 8;
-GENOME_LENGTH = 1000;
+GENOME_LENGTH = 10;
 
 INITIAL_GENOMES = 20;
 STABLE_GENOMES = 12;
@@ -31,27 +31,40 @@ class Genome:
         new_genome = Genome(False); #initialize Genome object with False to tell it not to bother filling its own genome with random words, as we'll do that next.
         new_genome.mutation_rate = mutation;
         seed();
+        numOfMutations = 0;
         for i in range(0, GENOME_LENGTH): #population entire genome of new offspring
             if randint(0, 1) == 1: #50/50 chance of any word coming from either parent
                 new_genome.genome.append(self.genome[i]); 
             else:
                 new_genome.genome.append(genome2.genome[i]);
-        for word in new_genome.genome:
+        for word in range(0, len(new_genome.genome)-1):
             if(randint(0, 100) < new_genome.mutation_rate * 100): #random chance of a character in a word mutating into something else.
-                mutation = list(word);
+                mutation = list(new_genome.genome[word]);
                 if randint(0, 1) == 1: # 50% chance that the mutation will be a character replacement or deletion
                     if randint(0, 1) == 1:
-                        del mutation[randint(0, len(word)-1)];
-                    else:
-                        mutation[randint(0, len(word)-1)] = choice(characters);
+                        mutation[randint(0, len(new_genome.genome[word])-1)] = choice(characters);
+                        numOfMutations+=1;
+                    elif len(new_genome.genome[word]) < MIN_WORD_LEN:
+                        del mutation[randint(0, len(new_genome.genome[word])-1)];
+                        numOfMutations+=1;
+
                 else:
-                    if randint(0, 1) == 1 and len(word) < MAX_WORD_LEN: # 25% chance that the mutation will lengthen the string by one character
+                    if randint(0, 1) == 1 and len(new_genome.genome[word]) < MAX_WORD_LEN: # 25% chance that the mutation will lengthen the string by one character
                         mutation.append(choice(characters));
-                    elif len(word) > MIN_WORD_LEN: # 25% chance that the mutation will shorten the string by one character.
+                        numOfMutations+=1;
+                    elif len(new_genome.genome[word]) > MIN_WORD_LEN: # 25% chance that the mutation will shorten the string by one character.
                         mutation.pop(); 
-                word = ''.join(str(c) for c in mutation);
+                        numOfMutations+=1;
+                new_genome.genome[word] = ''.join(str(c) for c in mutation);
+
+       
+        
         return new_genome;
     
+    def print(self):
+        for i in self.genome:
+            print(i, end=" ");
+        print();
     def similarity(self, genome): #returns the average word similarity of two genomes. May reveal something about genetic diversity (?)
         averageSimilarity = 0;
         for i in range(GENOME_LENGTH):

@@ -12,21 +12,17 @@ fitness is evaluated per-line - lines with a fitness of 0 aren't included and co
 """
 import keyword as k;
 from genome import *
+import math
 
 def evaluateFitness(genome):
     overallScore = 0;
     for word in genome:
+        temp = "";
         highestScore = 0;
         for keyword in k.kwlist: #for every keyword in the list of keywords
             currentScore = wordSimilarity(word, keyword);                                   
-            #for j in range(0, len(k.kwlist[i])-1): #for each char in the keyword
-            #    if len(word) > j and k.kwlist[i][j] == word[j]: #stops index out of bounds from happening, checks if the char at this position matches keyword in same position.
-            #        currentScore += 1;
-                #elif j != 0 and (word[j] == "F" or word[j] == "T" or word[j] == "N"): #If we're NOT at the start of the word and there is a capital letter, we punish fitness score.
-                #    currentScore -= 1;
-            #if(k.kwlist[i] == word):
-            #    currentScore += 25;
             if(currentScore > highestScore):       #we don't want multiple keywords to increment the same fitness score
+                temp = keyword
                 highestScore = currentScore
         overallScore += highestScore;
     return overallScore
@@ -40,8 +36,15 @@ def numberOfKeywords(genome):
     return wordCount;
 
 def wordSimilarity(word1, word2):
-    smallWord = min(word1, word2);
-    bigWord = max(word1, word2);
+    smallWord = "";
+    bigWord = "";
+    if(len(word1) > len(word2)):
+        smallWord = word2;
+        bigWord = word1;
+    else:
+        smallWord = word1;
+        bigWord = word2;
+#    print("small: " + smallWord + "(" + str(len(smallWord)) + ") big: " + bigWord + "(" + str(len(bigWord)) + ")")
     longestRun = 0;
     for i in range(0, len(smallWord)-1):
         indexSmall = 0;
@@ -53,6 +56,9 @@ def wordSimilarity(word1, word2):
                 indexSmall += 1;    
                 if run > longestRun:
                     longestRun = run;
+            else:
+                run = 0;
+                indexSmall = 0;
             indexBig += 1;
-
-        return longestRun/len(bigWord);
+#    print("(" + smallWord + ") " + str(longestRun) + " / " + str(len(bigWord)) + " (" + bigWord + ") = ." + str(math.floor(100*longestRun/len(bigWord))));
+    return longestRun/len(bigWord);

@@ -6,8 +6,8 @@ MIN_WORD_LEN = 2;
 MAX_WORD_LEN = 8;
 GENOME_LENGTH = 1000;
 
-INITIAL_GENOMES = 600;
-STABLE_GENOMES = 600;
+INITIAL_GENOMES = 350;
+STABLE_GENOMES = 350;
 
 MUTATION_RATE = 0.155; #up to 15.5% of words in a genome can be altered during a crossbreed.
 

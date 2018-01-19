@@ -57,7 +57,6 @@ def main():
     cream_of_the_crop = []
     numGenomes = STABLE_GENOMES;
     mutation_rate = .12
-    wordSimilarity("sda", "lambda");
     counter = 0;
     start_t = time.time();
     threading.Thread(target=lookForInput).start();

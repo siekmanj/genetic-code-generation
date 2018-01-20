@@ -49,7 +49,7 @@ def printGenome(genome):
     for i in genome.genome:
         print(i + " ", end="");
         counter += 1;
-        if counter % 22 == 0:
+        if counter % 15 == 0:
             print("");
 def main():
     genomes = initializeGenomes(INITIAL_GENOMES);

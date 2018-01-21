@@ -31,7 +31,8 @@ class Genome:
                     word += choice(characters) #append random characters to the word
                     
                 self.genome.append(word) #append the random word to the genome
-
+                
+        self.fitness_score = evaluateFitness(self.genome)/GENOME_LENGTH
                 
     def crossbreed(self, other_genome, mutation_rate): #takes two existing genomes, and inserts a word from one of two parents into every slot.
         
@@ -67,6 +68,8 @@ class Genome:
                             
                 new_genome.genome[word] = ''.join(str(c) for c in mutation) #re-insert the mutated word back into the genome
                 
+        self.fitness_score = evaluateFitness(self.genome)/GENOME_LENGTH
+
         return new_genome
     
     
@@ -93,7 +96,7 @@ class Genome:
 
     
     def fitness(self):
-        return evaluateFitness(self.genome)/GENOME_LENGTH
+        return self.fitness_score#evaluateFitness(self.genome)/GENOME_LENGTH
     
     def wordcount(self):
         return numberOfKeywords(self.genome)

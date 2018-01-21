@@ -15,7 +15,7 @@ import math
 from genome import *
 
 
-SHORT_TO_LONG_KEYWORD_RATIO = 0.32
+SHORT_TO_LONG_KEYWORD_RATIO = 0.37
 
 def evaluateFitness(genome):
     overallScore = 0;
@@ -23,10 +23,15 @@ def evaluateFitness(genome):
         temp = "";
         highestScore = 0;
         for keyword in k.kwlist: #for every keyword in the list of keywords
-            currentScore = wordSimilarity(word, keyword) * math.sqrt(len(keyword) * SHORT_TO_LONG_KEYWORD_RATIO);                                   
+            if not keyword == word:
+                currentScore = wordSimilarity(word, keyword) * math.sqrt(len(keyword) * SHORT_TO_LONG_KEYWORD_RATIO)
+            else:
+                currentSore = math.sqrt(len(keyword)) * SHORT_TO_LONG_KEYWORD_RATIO
+
             if(currentScore > highestScore):       #we don't want multiple keywords to increment the same fitness score
                 temp = keyword
                 highestScore = currentScore
+           
         overallScore += highestScore;
     return overallScore
 

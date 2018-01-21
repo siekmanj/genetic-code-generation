@@ -3,7 +3,7 @@ from random import *
 from fitness import *
 
 characters = ['T', 'F', 'N', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-POOL_SIZE = 200 #number of genomes to keep after culling the unfit
+POOL_SIZE = 300 #number of genomes to keep after culling the unfit
 MIN_WORD_LEN = 2
 MAX_WORD_LEN = 8
 GENOME_LENGTH = 100

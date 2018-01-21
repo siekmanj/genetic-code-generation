@@ -11,8 +11,6 @@ import threading
 
 import genome
 import fitness
-import os
-import tkinter
 
 MAX_CONCURRENT_THREADS = 10;
 

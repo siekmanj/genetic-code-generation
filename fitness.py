@@ -11,8 +11,11 @@ Compilation + 60
 fitness is evaluated per-line - lines with a fitness of 0 aren't included and considered inactive portions of genome
 """
 import keyword as k;
-from genome import *
 import math
+from genome import *
+
+
+SHORT_TO_LONG_KEYWORD_RATIO = 0.32
 
 def evaluateFitness(genome):
     overallScore = 0;
@@ -20,7 +23,7 @@ def evaluateFitness(genome):
         temp = "";
         highestScore = 0;
         for keyword in k.kwlist: #for every keyword in the list of keywords
-            currentScore = wordSimilarity(word, keyword);                                   
+            currentScore = wordSimilarity(word, keyword) * math.sqrt(len(keyword) * SHORT_TO_LONG_KEYWORD_RATIO);                                   
             if(currentScore > highestScore):       #we don't want multiple keywords to increment the same fitness score
                 temp = keyword
                 highestScore = currentScore
@@ -44,7 +47,6 @@ def wordSimilarity(word1, word2):
     else:
         smallWord = word1;
         bigWord = word2;
-#    print("small: " + smallWord + "(" + str(len(smallWord)) + ") big: " + bigWord + "(" + str(len(bigWord)) + ")")
     longestRun = 0;
     for i in range(0, len(smallWord)-1):
         indexSmall = 0;
@@ -60,5 +62,17 @@ def wordSimilarity(word1, word2):
                 run = 0;
                 indexSmall = 0;
             indexBig += 1;
-#    print("(" + smallWord + ") " + str(longestRun) + " / " + str(len(bigWord)) + " (" + bigWord + ") = ." + str(math.floor(100*longestRun/len(bigWord))));
     return longestRun/len(bigWord);
+
+def min(word1, word2):
+    if(len(word1) < len(word2)):
+        return word1
+    else:
+        return word2
+    
+def max(word1, word2):
+    if(len(word1) > len(word2)):
+        return word1
+    else:
+        return word2
+    

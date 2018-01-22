@@ -52,18 +52,18 @@ def getAverageSimilarity(genome, genomes):
             
         
             
-def breedGenomes(genomes, mutation_rate): #breeds an existing pool of genomes together to make more genomes.
+def breedGenomes(genomes): #breeds an existing pool of genomes together to make more genomes.
     
     if(genomes): #if genomes is not empty 
         
-        for i in range(len(genomes)): #breed a random number of the fittest genomes together
+        for i in range(math.floor(len(genomes) * uniform(1, 3))): #breed a random number of the fittest genomes together
             
             genome1 = choice(genomes) #randomly selects a genome from the list of fittest genomes
             genome2 = choice(genomes) #randomly selects a second genome from the list of fittest genomes
             
             if genome1 is not genome2:
                 
-                child = genome1.crossbreed(genome2, mutation_rate) #takes a random half from genome1 and genome2 to create a new genome, with a random chance for mutations.
+                child = genome1.crossbreed(genome2) #takes a random half from genome1 and genome2 to create a new genome, with a random chance for mutations.
                 genomes.append(child) #appends the child to the list of all the genomes.
             
     
@@ -79,19 +79,20 @@ def main():
 
         seed(); #seed the random number generator
 
-        print("Commencing cycle " + str(cycle) + ". Mutation rate: " + str(genome.MUTATION_RATE), end=". ");
+        print("Commencing cycle " + str(cycle), end=". ");
         
-        breedGenomes(genomes, genome.MUTATION_RATE);
+        breedGenomes(genomes);
         
         print("Current number of genomes in pool: " + str(len(genomes)));
 
         cream_of_the_crop = getFittestGenomes(genome.POOL_SIZE, genomes);
         
         top_fitness = cream_of_the_crop[0].fitness();
+        bottom_fitness = cream_of_the_crop[len(cream_of_the_crop)-1].fitness();
         top_wordcount = cream_of_the_crop[0].wordcount();
         similarity_factor = getAverageSimilarity(cream_of_the_crop[0], cream_of_the_crop);
         
-        print("Genetic similarity between #1 and top " + str(len(cream_of_the_crop)) + ": " + str(math.floor(100 * similarity_factor)) + "%. Highest score: " + str(math.floor(top_fitness*1000)/1000) + ". Keywords: " + str(top_wordcount) + "/" + str(genome.GENOME_LENGTH) + " (" + str(100*(top_wordcount)/genome.GENOME_LENGTH) + "%). Time elapsed since start of cycle: " + str(time.time() - start_time));
+        print("Genetic similarity between #1 and top " + str(len(cream_of_the_crop)) + ": " + str(math.floor(100 * similarity_factor)) + "%. Highest score: " + str(math.floor(top_fitness*1000)/1000) + ". Mutation rate: " + str(math.floor(1000*cream_of_the_crop[0].mutation_rate)/1000) + ". Lowest score: " + str(math.floor(bottom_fitness*1000)/1000) + ". Mutation rate: " + str(math.floor(1000*cream_of_the_crop[len(cream_of_the_crop)-1].mutation_rate)/1000) + ". Keywords: " + str(top_wordcount) + "/" + str(genome.GENOME_LENGTH) + " (" + str(100*(top_wordcount)/genome.GENOME_LENGTH) + "%). Time elapsed since start of cycle: " + str(math.floor(time.time() - start_time)));
         
         genomes = cream_of_the_crop
         

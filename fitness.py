@@ -15,7 +15,7 @@ import math
 from genome import *
 
 
-SHORT_TO_LONG_KEYWORD_RATIO = 0.37
+SHORT_TO_LONG_KEYWORD_RATIO = 0.32
 
 def evaluateFitness(genome):
     overallScore = 0;
@@ -23,11 +23,7 @@ def evaluateFitness(genome):
         temp = "";
         highestScore = 0;
         for keyword in k.kwlist: #for every keyword in the list of keywords
-            if not keyword == word:
-                currentScore = wordSimilarity(word, keyword) * math.sqrt(len(keyword) * SHORT_TO_LONG_KEYWORD_RATIO)
-            else:
-                currentSore = math.sqrt(len(keyword)) * SHORT_TO_LONG_KEYWORD_RATIO
-
+            currentScore = wordSimilarity(word, keyword) * math.sqrt(len(keyword) * SHORT_TO_LONG_KEYWORD_RATIO)
             if(currentScore > highestScore):       #we don't want multiple keywords to increment the same fitness score
                 temp = keyword
                 highestScore = currentScore
@@ -38,8 +34,8 @@ def evaluateFitness(genome):
 def numberOfKeywords(genome):
     wordCount = 0;
     for word in genome:
-        for i in range(0, len(k.kwlist)-1):
-            if k.kwlist[i] == word:
+        for i in k.kwlist:
+            if i == word:
                 wordCount += 1;
     return wordCount;
 
@@ -81,3 +77,10 @@ def max(word1, word2):
     else:
         return word2
     
+    
+    """
+
+in def ssert del yiel def asseF inj miasser elif uels fr TFals from zglobv not elsf in is or is
+for while xclasg aise raise eFals break rom if if in ceptrg pass dhile retuwg Falsl fpor and cnallyx dcl
+pssekf rom None from fglob or onek for
+"""

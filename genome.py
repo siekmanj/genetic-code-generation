@@ -1,14 +1,15 @@
 import time
 import math
+import os.path
+import fitness
 from random import *
-from fitness import *
 
 characters = ['T', 'F', 'N', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 POOL_SIZE = 500 #number of genomes to keep after culling the unfit
 MIN_WORD_LEN = 2
 MAX_WORD_LEN = 8
-GENOME_LENGTH = 50
-MUTATION_RATE = 0.155 #percentage of words in a genome which can be altered during a crossbreed.
+GENOME_LENGTH = 200
+MUTATION_RATE = 0.04 #percentage of words in a genome which can be altered during a crossbreed.
 
 
 
@@ -19,9 +20,13 @@ class Genome:
         
         self.genome = []
         self.mutation_rate = MUTATION_RATE
+        self.fitness_score = 0
+        self.id = str(randint(0, 100000000));
+        
+        if GENOME_LENGTH > 200:
+            print("WINDOW DOES NOT SUPPORT FILENAMES LARGER THAN 256 WORDS. YOU'RE STUPID.")
         
         if(init): #If init is true, then we need to populate this genome with random characters (this is only needed at start of simulation
-            
             seed() #seed the random number generator
             
             for i in range(0, GENOME_LENGTH): #populate entire genome
@@ -33,16 +38,15 @@ class Genome:
                     
                 self.genome.append(word) #append the random word to the genome
     
-            self.fitness_score = evaluateFitness(self.genome)/GENOME_LENGTH
-        
-        self.fitness_score = .1
+            self.fitness_score = fitness.evaluateFitness(self.genome)/GENOME_LENGTH
+
                 
     def crossbreed(self, other_genome): #takes two existing genomes, and inserts a word from one of two parents into every slot.
         
         seed() #seed the random number generator
         new_genome = Genome(False) #initialize Genome object with False to keep it from filling its genome with random words.
         #new_genome.mutation_rate =  0.125*(1 / (1 + math.exp(-(1/((self.fitness() + other_genome.fitness())/2))))) #multiply mutation rate by inverse parent's averaged fitness;
-        new_genome.mutation_rate = 0.05 / ((self.fitness() + other_genome.fitness())/2)
+        new_genome.mutation_rate = .035#0.05 / ((self.fitness() + other_genome.fitness())/2)
         for i in range(0, GENOME_LENGTH): #population entire genome of new offspring
 
             if randint(0, 1) == 0: #50/50 chance of any word coming from either parent
@@ -67,7 +71,7 @@ class Genome:
                             
                 new_genome.genome[word] = ''.join(str(c) for c in mutation) #re-insert the mutated word back into the genome
                 
-        self.fitness_score = evaluateFitness(self.genome)/GENOME_LENGTH
+        self.fitness_score = fitness.evaluateFitness(self.genome)/GENOME_LENGTH
         return new_genome
     
     
@@ -88,16 +92,43 @@ class Genome:
         
         for i in range(GENOME_LENGTH):
             
-            averageSimilarity += wordSimilarity(self.genome[i], genome.genome[i]) #wordSimilarity returns a number between 1 and 0 depending on how similar the two words are.
+            averageSimilarity += fitness.wordSimilarity(self.genome[i], genome.genome[i]) #wordSimilarity returns a number between 1 and 0 depending on how similar the two words are.
             
         return averageSimilarity/GENOME_LENGTH #return the average of the word similarities.
 
     
     def fitness(self):
-        return self.fitness_score #evaluateFitness(self.genome)/GENOME_LENGTH
-    
+        if self.fitness_score > 0:
+            return self.fitness_score
+        else:
+            self.fitness_score = fitness.evaluateFitness(self.genome)/GENOME_LENGTH
+            return self.fitness_score
     def wordcount(self):
-        return numberOfKeywords(self.genome)
+        return fitness.numberOfKeywords(self.genome)
     
-    def sigmoid(x):
-        return 1 / (1 + math.exp(-x))
+    def saveToFile(self):
+        folderName = "genomes/" + str(self.id)
+        fileName = "X.genome"
+        if not os.path.exists(folderName):
+            os.mkdir(folderName)
+            file = open(folderName + "/" + fileName, "w+")
+            file.write(" ".join(word for word in self.genome))
+            file.close()
+            return True
+        return False
+    
+    def removeFromPool(self):
+        folderName = "genomes/" + str(self.id)
+        fileName = "X.genome"
+        if os.path.exists(folderName + "/" + fileName):
+            os.remove(folderName + "/" + fileName)
+            os.rmdir(folderName)
+            return True
+        return False
+    
+    def getId(self):
+        return str(self.id)
+    
+    def getExistingGenomes():
+        print(os.listdir())
+        

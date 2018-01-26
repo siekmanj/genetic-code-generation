@@ -86,7 +86,7 @@ def main():
     if len(genomes) > 0:
         print("Found " + str(len(genomes)) + " existing genomes.")
         if len(genomes[0].genome) != genome.GENOME_LENGTH:
-            print("The genome lengths in the /genomes/ folder do not match the constant GENOME_LENGTH currently in genome.py (" + str(len(genomes[0].genome)) + " vs " + genome.GENOME_LENGTH + ")")
+            print("The genome lengths in the /genomes/ folder do not match the constant GENOME_LENGTH currently in genome.py (" + str(len(genomes[0].genome)) + " vs " + str(genome.GENOME_LENGTH) + ")")
             print("aborting...")
             exit()
     else:

@@ -5,10 +5,10 @@ import fitness
 from random import *
 
 characters = ['T', 'F', 'N', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-POOL_SIZE = 500 #number of genomes to keep after culling the unfit
+POOL_SIZE = 150 #number of genomes to keep after culling the unfit
 MIN_WORD_LEN = 2
 MAX_WORD_LEN = 8
-GENOME_LENGTH = 200
+GENOME_LENGTH = 30
 MUTATION_RATE = 0.02 #percentage of words in a genome which can be altered during a crossbreed.
 
 

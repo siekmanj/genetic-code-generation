@@ -27,7 +27,7 @@ class Genome:
         if(init): #If init is true, then we need to populate this genome with random characters (this is only needed at start of simulation)
             seed() #seed the random number generator
             
-            for i in range(0, GENOME_LENGTH): #populate entire genome
+            for i in range(GENOME_LENGTH): #populate entire genome
                 
                 word = ""
                 wordLength = randint(MIN_WORD_LEN, MAX_WORD_LEN) #get a random word length
@@ -43,16 +43,15 @@ class Genome:
         
         seed() #seed the random number generator
         new_genome = Genome(False) #initialize Genome object with False to keep it from filling its genome with random words.
-        #new_genome.mutation_rate =  0.125*(1 / (1 + math.exp(-(1/((self.fitness() + other_genome.fitness())/2))))) #multiply mutation rate by inverse parent's averaged fitness;
-        new_genome.mutation_rate = .035#0.05 / ((self.fitness() + other_genome.fitness())/2)
-        for i in range(0, GENOME_LENGTH): #population entire genome of new offspring
+        new_genome.mutation_rate = MUTATION_RATE
+        for i in range(GENOME_LENGTH): #population entire genome of new offspring
 
             if randint(0, 1) == 0: #50/50 chance of any word coming from either parent
                 new_genome.genome.append(self.genome[i]) #insert a word from parent 1
             else:
                 new_genome.genome.append(other_genome.genome[i]) #insert a word from parent 2
                         
-        for word in range(0, len(new_genome.genome)-1): #iterate through every word so that each one has an equal chance of being mutated
+        for word in range(len(new_genome.genome)): #iterate through every word so that each one has an equal chance of being mutated
             if(randint(0, 100) < new_genome.mutation_rate * 100): #random chance of a character in a word mutating into something else
 
                 mutation = list(new_genome.genome[word])
@@ -75,7 +74,7 @@ class Genome:
     #prints a genome
     def print(self, wordsPerLine): 
         
-        for i in range(len(self.genome)-1):
+        for i in range(len(self.genome)):
 
             print(self.genome[i] + " ", end="")
 

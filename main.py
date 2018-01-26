@@ -17,7 +17,7 @@ import fitness
 #initialize num genomes
 def initializeGenomes(num):
     genomes = []
-    for i in range(0, num):
+    for i in range(num):
         genomes.append(genome.Genome(True)) #initialize a genome with fresh random characters and append it onto the genome list
     return genomes
 
@@ -27,12 +27,12 @@ def getFittestGenomes(num, genomes):
     topGenomes = []
     fitList = []
     
-    for i in range(0, len(genomes)-1):
+    for i in range(len(genomes)):
         fitList.append(genomes[i].fitness())
         
     while(len(topGenomes) < num):
         currentTopScore = 0
-        for index in range(0, len(fitList)-1):
+        for index in range(len(fitList)):
             if genomes[index] not in topGenomes:
                 currentScore = fitList[index]
                 currentGenome = genomes[index]
@@ -114,7 +114,7 @@ def main():
         top_wordcount = cream_of_the_crop[0].wordcount()
         similarity_factor = getAverageSimilarity(cream_of_the_crop[0], cream_of_the_crop)
         
-        print("Genetic similarity between #1 and top " + str(len(cream_of_the_crop)) + ": " + str(math.floor(100 * similarity_factor)) + "%. Highest score: " + str(math.floor(top_fitness*1000)/1000) + ". Mutation rate: " + str(math.floor(1000*cream_of_the_crop[0].mutation_rate)/1000) + ". Lowest score: " + str(math.floor(bottom_fitness*1000)/1000) + ". Mutation rate: " + str(math.floor(1000*cream_of_the_crop[len(cream_of_the_crop)-1].mutation_rate)/1000) + ". Keywords: " + str(top_wordcount) + "/" + str(genome.GENOME_LENGTH) + " (" + str(100*(top_wordcount)/genome.GENOME_LENGTH) + "%). Time elapsed since start of cycle: " + str(math.floor(time.time() - start_time)) + "seconds.")
+        print("Genetic similarity between #1 and top " + str(len(cream_of_the_crop)) + ": " + str(math.floor(100 * similarity_factor)) + "%. Highest score: " + str(math.floor(top_fitness*1000)/1000) + ". Lowest score: " + str(math.floor(bottom_fitness*1000)/1000) + ". Mutation rate: " + str(math.floor(1000*cream_of_the_crop[len(cream_of_the_crop)-1].mutation_rate)/1000) + ". Keywords: " + str(top_wordcount) + "/" + str(genome.GENOME_LENGTH) + " (" + str(100*(top_wordcount)/genome.GENOME_LENGTH) + "%). Time elapsed since start of cycle: " + str(math.floor(time.time() - start_time)) + " sec.")
         
         for i in genomes:
             if i not in cream_of_the_crop:
